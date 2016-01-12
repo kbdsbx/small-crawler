@@ -25,7 +25,9 @@ exist_imgs = set([])
 image_opener = urllib.request.URLopener()
 
 def dep_find ( url ) :
-    print ( 'snippets {0} now...'.format( url ) )
+    global idx_save
+    global idx_tb_save
+    print ( 'snatching at {0} ...'.format( url ) )
     page = urllib.request.urlopen( url )
     if ( page.getcode() == 200 ) :
         page_text = page.read().decode( charset )
@@ -52,9 +54,11 @@ def dep_find ( url ) :
                 suffix = 'gif'
             
             if ( width <= threshold_width or height <= threshold_height ) :
-                shutil.move( f_temp, '{0}{1}.{2}'.format( dir_tb_save_path, hashlib.md5(f_temp.encode()).hexdigest(), suffix ) )
+                shutil.move( f_temp, '{0}{1:0>4}.{2}'.format( dir_tb_save_path, idx_tb_save, suffix ) )
+                idx_tb_save += 1
             else :
-                shutil.move( f_temp, '{0}{1}.{2}'.format( dir_save_path, hashlib.md5(f_temp.encode()).hexdigest(), suffix ) )
+                shutil.move( f_temp, '{0}{1:0>4}.{2}'.format( dir_save_path, idx_save, suffix ) )
+                idx_save += 1
 
             image_opener.close()
     else :
